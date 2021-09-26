@@ -1,0 +1,84 @@
+local function goInvis()
+    local Player = game.Players.LocalPlayer
+    local Character = Player.Character
+    local orignalCF = Character.PrimaryPart.CFrame
+    
+    local function GetRig()
+    if Player.Character then
+        local Humanoid = Player.Character:WaitForChild('Humanoid')
+            if Humanoid.RigType == Enum.HumanoidRigType.R15 then
+                return 'R15'
+            else
+                return 'R6'
+            end
+        end
+    end
+    
+    if _G.hideBody then
+        local Part = Instance.new('Part')
+        Part.Size = Vector3.new(10,2,10)
+        Part.Anchored = true
+        Part.CFrame = CFrame.new(Vector3.new(722, 33, 261))
+        Part.Parent = game.Workspace
+        Character.PrimaryPart.CFrame = Part.CFrame*CFrame.new(0,3,0)
+        wait(1)
+        spawn(function()
+            wait(3)
+            Part:Destroy()
+        end)
+    end
+    if GetRig() == 'R6' then
+        local Clone = Character.HumanoidRootPart:Clone()
+        Character.HumanoidRootPart:Destroy()
+        Clone.Parent = Character
+        print(GetRig()..". You should be invisible")
+    else
+        local Clone = Character.LowerTorso.Root:Clone()
+        Character.LowerTorso.Root:Destroy()
+        Clone.Parent = Character.LowerTorso
+        print(GetRig()..". You should be invisible")
+    end
+    
+    if _G.hideBody then
+        wait(1)
+        Character.PrimaryPart.CFrame = orignalCF
+    end
+end
+
+local function farm()
+    if _G.Autofarm then
+        Player = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+        for i,v in pairs(game:GetService("Workspace").NPCFolder:GetChildren()) do
+            if game:GetService("Players").LocalPlayer.leaderstats.Gold.Value >= 20000 and _G.LuckDraw == "One" then
+                Player.CFrame = game:GetService("Workspace").LuckDraw.One.CFrame*CFrame.new(0,0,5)
+                wait(2)
+                local Event = game:GetService("ReplicatedStorage").PetEvents.LuckDrawBuyEvent
+                Event:FireServer()
+            elseif game:GetService("Players").LocalPlayer.leaderstats.Gold.Value >= 2000 and _G.LuckDraw == "Bleach" then
+                Player.CFrame = game:GetService("Workspace").LuckDraw.Bleach.CFrame*CFrame.new(0,0,5)
+                wait(2)
+                local Event = game:GetService("ReplicatedStorage").PetEvents.LuckDrawBuyEvent
+                Event:FireServer()
+            elseif game:GetService("Players").LocalPlayer.leaderstats.Gold.Value >= 300 and _G.LuckDraw == "Demon" then
+                Player.CFrame = game:GetService("Workspace").LuckDraw.Demon.CFrame*CFrame.new(0,0,5)
+                wait(2)
+                local Event = game:GetService("ReplicatedStorage").PetEvents.LuckDrawBuyEvent
+                Event:FireServer()
+            end
+            wait(4)
+            
+            print(v)
+            print(v.Humanoid.Health)
+            while v.Humanoid.Health ~= 0 do
+                local A_1 = v.Humanoid
+                local A_2 = v.Name
+                local A_3 = 2
+                local Event = game:GetService("ReplicatedStorage").RemoteEvent.SwordHit
+                Event:FireServer(A_1, A_2, A_3)
+                wait(.1)
+            end
+        end
+    end
+end
+
+farm()
